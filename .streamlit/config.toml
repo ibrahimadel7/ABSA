@@ -1,3 +1,13 @@
+[server]
+headless = true
+enableCORS = false
+port = 8501
+
+[browser]
+gatherUsageStats = false
+
+[global]
+logLevel = "info"
 [theme]
 base = "light"
 primaryColor = "#5C2A21"
