@@ -15,6 +15,11 @@ try:
 except ImportError:
     from preprocessing import group_business_category
 
+try:
+    from .service import get_service as _get_service
+except Exception:
+    _get_service = None
+
 
 def _resolve_api_base_url() -> str:
     configured = (
@@ -575,19 +580,38 @@ def predict_via_api(
         "platform": platform,
         "star_rating": star_rating,
     }
-    response = requests.post(PREDICT_URL, json=payload, timeout=20)
-    response.raise_for_status()
-    return response.json()
+    # Try HTTP API first, fall back to in-process service when available
+    try:
+        response = requests.post(PREDICT_URL, json=payload, timeout=20)
+        response.raise_for_status()
+        return response.json()
+    except Exception:
+        if _get_service is not None:
+            service = _get_service()
+            return service.predict(
+                review_text=review_text,
+                business_category=business_category,
+                platform=platform,
+                star_rating=star_rating,
+            )
+        raise
 
 
 def predict_batch_via_api(items: list[dict]) -> list[dict]:
-    response = requests.post(BATCH_PREDICT_URL, json={"items": items}, timeout=120)
-    response.raise_for_status()
-    data = response.json()
-    predictions = data.get("predictions", [])
-    if len(predictions) != len(items):
-        raise RuntimeError("Backend returned a different number of predictions than requested.")
-    return predictions
+    # Try HTTP batch endpoint, fall back to local service if available
+    try:
+        response = requests.post(BATCH_PREDICT_URL, json={"items": items}, timeout=120)
+        response.raise_for_status()
+        data = response.json()
+        predictions = data.get("predictions", [])
+        if len(predictions) != len(items):
+            raise RuntimeError("Backend returned a different number of predictions than requested.")
+        return predictions
+    except Exception:
+        if _get_service is not None:
+            service = _get_service()
+            return service.predict_batch(items)
+        raise
 
 
 def predict_review(
