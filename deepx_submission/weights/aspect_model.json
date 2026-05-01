@@ -1,0 +1,22 @@
+{
+  "name": "aspect_detection_model",
+  "type": "Pipeline(ColumnTransformer + OneVsRestClassifier(LinearSVC))",
+  "labels": [
+    "food",
+    "service",
+    "price",
+    "cleanliness",
+    "delivery",
+    "ambiance",
+    "app_experience",
+    "general",
+    "none"
+  ],
+  "feature_columns": [
+    "review_text_clean",
+    "business_category_grouped",
+    "platform"
+  ],
+  "thresholds_file": "aspect_thresholds.json",
+  "binary_weights_file": "aspect_model.joblib"
+}

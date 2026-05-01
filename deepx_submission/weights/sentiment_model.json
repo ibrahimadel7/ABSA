@@ -1,0 +1,16 @@
+{
+  "name": "aspect_sentiment_model",
+  "type": "Pipeline(ColumnTransformer + LinearSVC)",
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "feature_columns": [
+    "review_text_clean",
+    "business_category_grouped",
+    "platform",
+    "aspect"
+  ],
+  "binary_weights_file": "sentiment_model.joblib"
+}

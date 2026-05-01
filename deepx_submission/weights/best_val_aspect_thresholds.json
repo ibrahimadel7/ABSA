@@ -1,0 +1,11 @@
+{
+  "food": 0.3,
+  "service": -0.05,
+  "price": 0.0,
+  "cleanliness": 0.1,
+  "delivery": -0.4,
+  "ambiance": 0.0,
+  "app_experience": -0.2,
+  "general": 0.4,
+  "none": 0.0
+}

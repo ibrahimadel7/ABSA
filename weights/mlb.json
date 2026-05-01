@@ -1,0 +1,15 @@
+{
+  "name": "aspect_label_binarizer",
+  "classes": [
+    "food",
+    "service",
+    "price",
+    "cleanliness",
+    "delivery",
+    "ambiance",
+    "app_experience",
+    "general",
+    "none"
+  ],
+  "binary_weights_file": "mlb.joblib"
+}
